@@ -18,51 +18,41 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.osworks.model.Cliente;
-import br.com.osworks.repository.ClienteRepository;
+import br.com.osworks.service.ClienteService;
 
 @RequestMapping(value="/clientes")
 @RestController
 public class ClienteController {
 
+	
 	@Autowired
-	private ClienteRepository cr;
+	private ClienteService cs;
 	
 	@GetMapping("")
-	public List<Cliente> buscarClientes() {
-		return cr.findAll();
+	public List<Cliente> buscaClientes() {
+		return cs.buscaClientes();
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Cliente> buscaCliente(@PathVariable Long id){
-		if (cr.existsById(id)) {
-			return ResponseEntity.of(cr.findById(id));
-		}
-		return ResponseEntity.notFound().build();
+		return cs.buscaCliente(id);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cliente cadastraCliente(@Valid @RequestBody Cliente cliente){
-		return cr.save(cliente);
+		return cs.cadastraCliente(cliente);
 	}
 	
 	@PutMapping(value="/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Cliente>atualizaCliente(@Valid @RequestBody Cliente clienteAtual, @PathVariable Long id){
-		if (cr.existsById(id)) {
-			clienteAtual.setId(id);
-			return ResponseEntity.ok(cr.save(clienteAtual));
-		}
-		return ResponseEntity.notFound().build();
+		return cs.atualizaCliente(clienteAtual, id);
 	}
 	
 	@DeleteMapping(value="/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Cliente>apagaCliente(@PathVariable Long id){
-		if (cr.existsById(id)) {
-			cr.deleteById(id);
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.notFound().build();
+		return cs.apagaCliente(id);
 	}
 }
