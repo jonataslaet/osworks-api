@@ -2,6 +2,8 @@ package br.com.osworks.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,14 +42,13 @@ public class ClienteController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Cliente> cadastraCliente(@RequestBody Cliente cliente){
-		cr.save(cliente);
-		return ResponseEntity.ok(cliente);
+	public Cliente cadastraCliente(@Valid @RequestBody Cliente cliente){
+		return cr.save(cliente);
 	}
 	
 	@PutMapping(value="/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public ResponseEntity<Cliente>atualizaCliente(@RequestBody Cliente clienteAtual, @PathVariable Long id){
+	public ResponseEntity<Cliente>atualizaCliente(@Valid @RequestBody Cliente clienteAtual, @PathVariable Long id){
 		if (cr.existsById(id)) {
 			clienteAtual.setId(id);
 			return ResponseEntity.ok(cr.save(clienteAtual));
