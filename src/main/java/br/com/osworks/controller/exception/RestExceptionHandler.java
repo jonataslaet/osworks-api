@@ -5,6 +5,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,8 +33,25 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(ObjectNotFoundException.class)
 	protected ResponseEntity<Object> handleEntityNotFound(ObjectNotFoundException ex) {
 		String erro = "Objeto não encontrado";
-		Erro apiError = new Erro(HttpStatus.NOT_FOUND, erro, ex);
+		Erro apiError = new Erro();
+		apiError.setStatus(HttpStatus.NOT_FOUND);
+		apiError.setMessagem(erro);
+		apiError.setDebugMessagem(ex.getLocalizedMessage());
+		
 		return construtorDaEntidadeResposta(apiError);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String mensagemAmigavel = "Requisição JSON malformada";
+		
+		Erro erro = new Erro();
+		erro.setStatus(status);
+		erro.setMessagem(mensagemAmigavel);
+		erro.setDebugMessagem(ex.getLocalizedMessage());
+		
+		return construtorDaEntidadeResposta(erro);
 	}
 	
 	private ResponseEntity<Object> construtorDaEntidadeResposta(Erro ErroDeApi) {
