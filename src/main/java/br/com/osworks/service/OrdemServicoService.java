@@ -1,6 +1,6 @@
 package br.com.osworks.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public class OrdemServicoService {
 		Cliente cliente = cr.findById(ordemServico.getCliente().getId()).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
 		ordemServico.setStatus(StatusOrdemServico.ABERTA);
 		ordemServico.setCliente(cliente);
-		ordemServico.setDataAbertura(LocalDateTime.now());
+		ordemServico.setDataAbertura(OffsetDateTime.now());
 		return or.save(ordemServico);
 	}
 

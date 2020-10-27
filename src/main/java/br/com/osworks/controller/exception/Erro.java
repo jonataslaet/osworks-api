@@ -1,6 +1,6 @@
 package br.com.osworks.controller.exception;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +13,13 @@ public class Erro {
 
 	private HttpStatus status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime instante;
+    private OffsetDateTime instante;
     private String messagem;
     private String debugMessagem;
     private List<ErroDeCampo> errosDeCampo;
     
     public Erro() {
-		instante = LocalDateTime.now();
+		instante = OffsetDateTime.now();
 	}
 
 	public void adicionaErrosDeCampo(List<FieldError> fieldErrors) {
@@ -38,10 +38,10 @@ public class Erro {
 	public void setStatus(HttpStatus status) {
 		this.status = status;
 	}
-	public LocalDateTime getInstante() {
+	public OffsetDateTime getInstante() {
 		return instante;
 	}
-	public void setInstante(LocalDateTime instante) {
+	public void setInstante(OffsetDateTime instante) {
 		this.instante = instante;
 	}
 	public String getMessagem() {
