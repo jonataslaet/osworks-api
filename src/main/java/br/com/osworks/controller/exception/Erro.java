@@ -22,24 +22,6 @@ public class Erro {
 		instante = LocalDateTime.now();
 	}
 
-//	public Erro(HttpStatus status) {
-//		this();
-//		this.status = status;
-//	}
-//
-//	public Erro(HttpStatus status, Throwable ex) {
-//		this();
-//		this.status = status;
-//		this.messagem = "Erro desconhecido e inesperado";
-//		this.debugMessagem = ex.getLocalizedMessage();
-//	}
-//
-	public Erro(HttpStatus status, String message, Throwable ex) {
-		this.status = status;
-		this.messagem = message;
-		this.debugMessagem = ex.getLocalizedMessage();
-	}
-	
 	public void adicionaErrosDeCampo(List<FieldError> fieldErrors) {
 		fieldErrors.forEach(e -> {
 			if (errosDeCampo == null) {
