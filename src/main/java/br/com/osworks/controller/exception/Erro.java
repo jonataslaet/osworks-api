@@ -34,11 +34,11 @@ public class Erro {
 //		this.debugMessagem = ex.getLocalizedMessage();
 //	}
 //
-//	public Erro(HttpStatus status, String message, Throwable ex) {
-//		this.status = status;
-//		this.messagem = message;
-//		this.debugMessagem = ex.getLocalizedMessage();
-//	}
+	public Erro(HttpStatus status, String message, Throwable ex) {
+		this.status = status;
+		this.messagem = message;
+		this.debugMessagem = ex.getLocalizedMessage();
+	}
 	
 	public void adicionaErrosDeCampo(List<FieldError> fieldErrors) {
 		fieldErrors.forEach(e -> {

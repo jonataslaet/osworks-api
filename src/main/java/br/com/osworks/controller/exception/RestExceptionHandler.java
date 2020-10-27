@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RestExceptionHandler extends ResponseEntityExceptionHandler{
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -24,6 +26,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 		erro.adicionaErrosDeCampo(ex.getBindingResult().getFieldErrors());
 		
 		return construtorDaEntidadeResposta(erro);
+	}
+	
+	
+	@ExceptionHandler(ObjectNotFoundException.class)
+	protected ResponseEntity<Object> handleEntityNotFound(ObjectNotFoundException ex) {
+		String erro = "Objeto não encontrado";
+		Erro apiError = new Erro(HttpStatus.NOT_FOUND, erro, ex);
+		return construtorDaEntidadeResposta(apiError);
 	}
 	
 	private ResponseEntity<Object> construtorDaEntidadeResposta(Erro ErroDeApi) {
