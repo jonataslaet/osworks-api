@@ -1,8 +1,11 @@
 package br.com.osworks.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.osworks.controller.exception.ObjectNotFoundException;
@@ -27,5 +30,17 @@ public class OrdemServicoService {
 		ordemServico.setCliente(cliente);
 		ordemServico.setDataAbertura(LocalDateTime.now());
 		return or.save(ordemServico);
+	}
+
+	public List<OrdemServico> listar() {
+		return or.findAll();
+	}
+
+	public ResponseEntity<OrdemServico> buscar(Long id) {
+		Optional<OrdemServico> ordemServico = or.findById(id);
+		if (ordemServico.isPresent()) {
+			return ResponseEntity.ok(ordemServico.get());
+		}
+		throw new ObjectNotFoundException("Ordem de Serviço não encontrada");
 	}
 }
