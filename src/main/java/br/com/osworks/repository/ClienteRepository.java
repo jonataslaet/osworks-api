@@ -8,4 +8,6 @@ import br.com.osworks.model.Cliente;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 
+	Cliente findByEmail(String email);
+
 }

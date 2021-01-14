@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import br.com.osworks.controller.exception.NegocioException;
 import br.com.osworks.model.Cliente;
 import br.com.osworks.repository.ClienteRepository;
 
@@ -27,6 +28,10 @@ public class ClienteService {
 	}
 	
 	public Cliente cadastraCliente(Cliente cliente){
+		Cliente clienteExistente = cr.findByEmail(cliente.getEmail());
+		if (clienteExistente != null && cliente.getEmail().equalsIgnoreCase(clienteExistente.getEmail())) {
+			throw new NegocioException("Já existe um cliente com este email");
+		}
 		return cr.save(cliente);
 	}
 	

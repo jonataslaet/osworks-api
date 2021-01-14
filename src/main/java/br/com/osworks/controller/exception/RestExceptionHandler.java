@@ -41,6 +41,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 		return construtorDaEntidadeResposta(apiError);
 	}
 	
+	@ExceptionHandler(NegocioException.class)
+	protected ResponseEntity<Object> handleAlreadyExistentObject(NegocioException ex) {
+		String erro = "Objeto já existente";
+		Erro apiError = new Erro();
+		apiError.setStatus(HttpStatus.NOT_ACCEPTABLE);
+		apiError.setMessagem(erro);
+		apiError.setDebugMessagem(ex.getLocalizedMessage());
+		
+		return construtorDaEntidadeResposta(apiError);
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
