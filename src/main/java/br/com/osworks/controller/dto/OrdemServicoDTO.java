@@ -9,7 +9,7 @@ import br.com.osworks.model.StatusOrdemServico;
 public class OrdemServicoDTO {
 
 	private Long id;
-	private String nomeCliente;
+	private ClienteDTO clienteDTO;
 	private String descricao;
 	private BigDecimal preco;
 	private StatusOrdemServico status;
@@ -22,7 +22,7 @@ public class OrdemServicoDTO {
 	
 	public OrdemServicoDTO(OrdemServico ordemServico) {
 		this.id = ordemServico.getId();
-		this.nomeCliente = ordemServico.getCliente().getNome();
+		this.clienteDTO = new ClienteDTO(ordemServico.getCliente());
 		this.descricao = ordemServico.getDescricao();
 		this.preco = ordemServico.getPreco();
 		this.status = ordemServico.getStatus();
@@ -35,12 +35,6 @@ public class OrdemServicoDTO {
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public String getNomeCliente() {
-		return nomeCliente;
-	}
-	public void setNomeCliente(String nomeCliente) {
-		this.nomeCliente = nomeCliente;
 	}
 	public String getDescricao() {
 		return descricao;
@@ -71,5 +65,13 @@ public class OrdemServicoDTO {
 	}
 	public void setDataFinalizacao(OffsetDateTime dataFinalizacao) {
 		this.dataFinalizacao = dataFinalizacao;
+	}
+
+	public ClienteDTO getClienteDTO() {
+		return clienteDTO;
+	}
+
+	public void setClienteDTO(ClienteDTO clienteDTO) {
+		this.clienteDTO = clienteDTO;
 	}	
 }
