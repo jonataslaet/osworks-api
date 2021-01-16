@@ -38,16 +38,32 @@ public class OrdemServico {
 	@NotNull
 	private BigDecimal preco;
 	
-	@JsonProperty(access = Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
 	private StatusOrdemServico status;
 	
-	@JsonProperty(access = Access.READ_ONLY)
 	private OffsetDateTime dataAbertura;
-	
-	@JsonProperty(access = Access.READ_ONLY)
 	private OffsetDateTime dataFinalizacao;
 	
+	public OrdemServico() {
+		
+	}
+	
+	public OrdemServico(Long id,
+			@Valid @ConvertGroup(from = Default.class, to = br.com.osworks.model.ValidationGroups.Id.class) @NotNull Cliente cliente,
+			@NotBlank String descricao, @NotNull BigDecimal preco, StatusOrdemServico status,
+			OffsetDateTime dataAbertura, OffsetDateTime dataFinalizacao) {
+		super();
+		this.id = id;
+		this.cliente = cliente;
+		this.descricao = descricao;
+		this.preco = preco;
+		this.status = status;
+		this.dataAbertura = dataAbertura;
+		this.dataFinalizacao = dataFinalizacao;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.osworks.controller.dto.OrdemServicoDTO;
-import br.com.osworks.model.OrdemServico;
+import br.com.osworks.controller.dto.OrdemServicoInput;
 import br.com.osworks.service.OrdemServicoService;
 
 @RestController
@@ -28,7 +28,7 @@ public class OrdemServicoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public OrdemServicoDTO criar(@Valid @RequestBody OrdemServico ordemServico) {
+	public OrdemServicoDTO criar(@Valid @RequestBody OrdemServicoInput ordemServico) {
 		return os.criar(ordemServico);
 	}
 	

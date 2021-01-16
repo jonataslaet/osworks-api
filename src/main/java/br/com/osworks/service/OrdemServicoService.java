@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.osworks.controller.dto.OrdemServicoDTO;
+import br.com.osworks.controller.dto.OrdemServicoInput;
 import br.com.osworks.controller.exception.ObjectNotFoundException;
 import br.com.osworks.model.Cliente;
 import br.com.osworks.model.OrdemServico;
@@ -26,8 +27,11 @@ public class OrdemServicoService {
 	@Autowired
 	ClienteRepository cr;
 	
-	public OrdemServicoDTO criar(OrdemServico ordemServico) {
-		Cliente cliente = cr.findById(ordemServico.getCliente().getId()).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
+	public OrdemServicoDTO criar(OrdemServicoInput osi) {
+		Cliente cliente = cr.findById(osi.getCliente().getId()).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado"));
+		OrdemServico ordemServico = new OrdemServico();
+		ordemServico.setDescricao(osi.getDescricao());
+		ordemServico.setPreco(osi.getPreco());
 		ordemServico.setStatus(StatusOrdemServico.ABERTA);
 		ordemServico.setCliente(cliente);
 		ordemServico.setDataAbertura(OffsetDateTime.now());
@@ -45,4 +49,5 @@ public class OrdemServicoService {
 		}
 		throw new ObjectNotFoundException("Ordem de Serviço não encontrada");
 	}
+	
 }
