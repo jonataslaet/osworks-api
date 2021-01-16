@@ -13,6 +13,7 @@ import br.com.osworks.controller.dto.ComentarioDTO;
 import br.com.osworks.controller.dto.ComentarioInput;
 import br.com.osworks.controller.dto.OrdemServicoDTO;
 import br.com.osworks.controller.dto.OrdemServicoInput;
+import br.com.osworks.controller.exception.NegocioException;
 import br.com.osworks.controller.exception.ObjectNotFoundException;
 import br.com.osworks.model.Cliente;
 import br.com.osworks.model.Comentario;
@@ -50,22 +51,18 @@ public class OrdemServicoService {
 	}
 
 	public ResponseEntity<OrdemServicoDTO> buscar(Long id) {
-		Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(id);
-		if (ordemServico.isPresent()) {
-			return ResponseEntity.ok(new OrdemServicoDTO(ordemServico.get()));
-		}
-		throw new ObjectNotFoundException("Ordem de Serviço não encontrada");
+		return ResponseEntity.ok(new OrdemServicoDTO(buscarOrdemDeServico(id)));
 	}
 	
 	public Comentario adicionarComentario(Long ordemServicoId, String descricao) {
-		OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId).orElseThrow(() -> new ObjectNotFoundException("Ordem de serviço não encontrada"));
+		OrdemServico ordemServico = buscarOrdemDeServico(ordemServicoId);
 		
 		Comentario comentario = new Comentario();
 		comentario.setDataEnvio(OffsetDateTime.now());
 		comentario.setDescricao(descricao);
 		comentario.setOrdemServico(ordemServico);
 		ordemServico.getComentarios().add(comentario);
-//		ordemServicoRepository.save(ordemServico);
+		ordemServicoRepository.save(ordemServico);
 		return comentarioRepository.save(comentario);
 	}
 
@@ -74,7 +71,7 @@ public class OrdemServicoService {
 	}
 
 	public List<ComentarioDTO> listarComentarios(Long idOrdem) {
-		OrdemServico ordemServico = ordemServicoRepository.findById(idOrdem).orElseThrow(() -> new ObjectNotFoundException("Ordem de serviço não encontrada"));
+		OrdemServico ordemServico = buscarOrdemDeServico(idOrdem);
 		List<ComentarioDTO> comentarios = comentarioRepository.findAllByOrdemServico(ordemServico).stream().map(x -> new ComentarioDTO(x)).collect(Collectors.toList());;
 		return comentarios;
 	}
@@ -85,6 +82,18 @@ public class OrdemServicoService {
 			return new ComentarioDTO(comentario.get());
 		}
 		throw new ObjectNotFoundException("Comentario não encontrada");
+	}
+	
+	public void finalizarOrdem(Long id) {
+		OrdemServico ordem = buscarOrdemDeServico(id);
+		if (!ordem.getStatus().equals(StatusOrdemServico.ABERTA)) {
+			throw new NegocioException("Apenas ordem de serviço aberta pode ser fechada.");
+		}
+	}
+	
+	private OrdemServico buscarOrdemDeServico(Long id) {
+		OrdemServico ordemServico = ordemServicoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Ordem de serviço não encontrada"));
+		return ordemServico;
 	}
 	
 }
