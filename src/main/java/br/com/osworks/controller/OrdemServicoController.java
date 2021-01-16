@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.osworks.controller.dto.OrdemServicoDTO;
 import br.com.osworks.model.OrdemServico;
 import br.com.osworks.service.OrdemServicoService;
 
@@ -27,17 +28,17 @@ public class OrdemServicoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public OrdemServico criar(@Valid @RequestBody OrdemServico ordemServico) {
+	public OrdemServicoDTO criar(@Valid @RequestBody OrdemServico ordemServico) {
 		return os.criar(ordemServico);
 	}
 	
 	@GetMapping
-	public List<OrdemServico> listar(){
+	public List<OrdemServicoDTO> listar(){
 		return os.listar();
 	}
 	
 	@GetMapping("/{id}")
-	ResponseEntity<OrdemServico> buscar(@PathVariable Long id){
+	ResponseEntity<OrdemServicoDTO> buscar(@PathVariable Long id){
 		return os.buscar(id);
 	}
 }
