@@ -10,5 +10,4 @@ import br.com.osworks.model.OrdemServico;
 
 @Repository
 public interface ComentarioRepository extends JpaRepository<Comentario, Long>{
-	List<Comentario> findAllByOrdemServico(OrdemServico ordemServico);
 }

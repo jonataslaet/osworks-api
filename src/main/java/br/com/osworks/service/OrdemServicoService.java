@@ -72,7 +72,10 @@ public class OrdemServicoService {
 
 	public List<ComentarioDTO> listarComentarios(Long idOrdem) {
 		OrdemServico ordemServico = buscarOrdemDeServico(idOrdem);
-		List<ComentarioDTO> comentarios = comentarioRepository.findAllByOrdemServico(ordemServico).stream().map(x -> new ComentarioDTO(x)).collect(Collectors.toList());;
+		List<ComentarioDTO> comentarios = ordemServico.getComentarios().stream().map(x -> new ComentarioDTO(x)).collect(Collectors.toList());
+		if (comentarios.isEmpty()) {
+			throw new NegocioException("Esta ordem de serviço não possui comentários.");
+		}
 		return comentarios;
 	}
 
@@ -89,6 +92,9 @@ public class OrdemServicoService {
 		if (!ordem.getStatus().equals(StatusOrdemServico.ABERTA)) {
 			throw new NegocioException("Apenas ordem de serviço aberta pode ser fechada.");
 		}
+		ordem.setStatus(StatusOrdemServico.FINALIZADA);
+		ordem.setDataFinalizacao(OffsetDateTime.now());
+		ordemServicoRepository.save(ordem);
 	}
 	
 	private OrdemServico buscarOrdemDeServico(Long id) {
